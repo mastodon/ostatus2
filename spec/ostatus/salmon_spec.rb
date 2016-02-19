@@ -34,12 +34,20 @@ describe OStatus::Salmon do
   describe '#unpack' do
     let(:envelope) { subject.pack(body, key) }
 
-    it 'returns the original body if the signature is correct' do
-      expect(subject.unpack(envelope, key)).to eql body
+    it 'returns the original body' do
+      expect(subject.unpack(envelope)).to eql body
+    end
+  end
+
+  describe '#verify' do
+    let(:envelope) { subject.pack(body, key) }
+
+    it 'returns true if the signature is correct' do
+      expect(subject.verify(envelope, key)).to be true
     end
 
-    it 'raises an error if the signature cannot be verified' do
-      expect { subject.unpack(envelope, OpenSSL::PKey::RSA.new(2048)) }.to raise_error OStatus::BadSalmonError
+    it 'returns false if the signature cannot be verified' do
+      expect(subject.verify(envelope, OpenSSL::PKey::RSA.new(2048))).to be false
     end
   end
 end

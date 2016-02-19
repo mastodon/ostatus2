@@ -53,4 +53,11 @@ When you want to notify a remote resource about an interaction (like a comment):
 When you receive a Salmon notification about a remote interaction:
 
     salmon  = OStatus::Salmon.new
-    comment = salmon.unpack(envelope, your_rsa_keypair)
+    comment = salmon.unpack(envelope)
+
+    # Parse comment and determine who the remote author is pretending to be,
+    # fetch their public key via Webfinger or something like that, and finally
+
+    if salmon.verify(envelope, remote_public_key)
+      # You can be sure the salmon is genuine
+    end

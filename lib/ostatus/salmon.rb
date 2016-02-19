@@ -5,10 +5,10 @@ module OStatus
     # Create a magical envelope XML document around the original body
     # and sign it with a private key
     # @param [String] body
-    # @param [OpenSSL::PKey::RSA] key
+    # @param [OpenSSL::PKey::RSA] key The private part of the key will be used
     # @return [String] Magical envelope XML
     def pack(body, key)
-      signed    = plaintext_signature(body)
+      signed    = plaintext_signature(body, 'application/atom+xml', 'base64url', 'RSA-SHA256')
       signature = Base64.urlsafe_encode64(key.sign(digest, signed))
 
       Nokogiri::XML::Builder.new do |xml|
@@ -16,7 +16,7 @@ module OStatus
           xml['me'].data({ type: 'application/atom+xml' }, Base64.urlsafe_encode64(body))
           xml['me'].encoding('base64url')
           xml['me'].alg('RSA-SHA256')
-          xml['me'].sig({ keyhash: Base64.urlsafe_encode64(key.public_key.to_s) }, signature)
+          xml['me'].sig({ key_id: Base64.urlsafe_encode64(key.public_key.to_s) }, signature)
         end
       end.to_xml
     end
@@ -33,26 +33,22 @@ module OStatus
 
     # Unpack a magical envelope to get the content inside
     # @param [String] raw_body Magical envelope
-    # @param [OpenSSL::PKey::RSA] key
-    # @raise [OStatus::BadSalmonError] Error raised when the integrity of the envelope could not be verified with the given key
+    # @raise [OStatus::BadSalmonError] Error raised if the envelope is malformed
     # @return [String] Content inside the envelope
-    def unpack(raw_body, key)
-      xml = Nokogiri::XML(raw_body)
-
-      data      = xml.at_xpath('//me:data')
-      type      = data.attribute('type').value
-      body      = Base64::urlsafe_decode64(data.content)
-      sig       = xml.at_xpath('//me:sig')
-      keyhash   = Base64::urlsafe_decode64(sig.attribute('keyhash').value)
-      signature = Base64::urlsafe_decode64(sig.content)
-      encoding  = xml.at_xpath('//me:encoding').content
-      alg       = xml.at_xpath('//me:alg').content
-
-      unless key.public_key.verify(digest, signature, plaintext_signature(body))
-        raise OStatus::BadSalmonError
-      end
-
+    def unpack(raw_body)
+      body, _, _ = parse(raw_body)
       body
+    end
+
+    # Verify the magical envelope's integrity
+    # @param [String] raw_body Magical envelope
+    # @param [OpenSSL::PKey::RSA] key The public part of the key will be used
+    # @return [Boolean]
+    def verify(raw_body, key)
+      _, plaintext, signature = parse(raw_body)
+      key.public_key.verify(digest, signature, plaintext)
+    rescue OStatus::BadSalmonError
+      false
     end
 
     private
@@ -65,8 +61,25 @@ module OStatus
       OpenSSL::Digest::SHA256.new
     end
 
-    def plaintext_signature(data)
-      [data, 'application/atom+xml', 'base64url', 'RSA-SHA256'].map { |i| Base64.urlsafe_encode64(i) }.join('.')
+    def parse(raw_body)
+      xml = Nokogiri::XML(raw_body)
+
+      raise OStatus::BadSalmonError if xml.at_xpath('//me:data').nil? || xml.at_xpath('//me:data').attribute('type').nil? || xml.at_xpath('//me:sig').nil? || xml.at_xpath('//me:encoding').nil? || xml.at_xpath('//me:alg').nil?
+
+      data      = xml.at_xpath('//me:data')
+      type      = data.attribute('type').value
+      body      = Base64::urlsafe_decode64(data.content)
+      sig       = xml.at_xpath('//me:sig')
+      signature = Base64::urlsafe_decode64(sig.content)
+      encoding  = xml.at_xpath('//me:encoding').content
+      alg       = xml.at_xpath('//me:alg').content
+      plaintext = plaintext_signature(body, type, encoding, alg)
+
+      [body, plaintext, signature]
+    end
+
+    def plaintext_signature(data, type, encoding, alg)
+      [data, type, encoding, alg].map { |i| Base64.urlsafe_encode64(i) }.join('.')
     end
   end
 end

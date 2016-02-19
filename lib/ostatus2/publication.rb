@@ -1,4 +1,4 @@
-module OStatus
+module OStatus2
   class Publication
     # @param [String] url Topic URL
     # @param [Array] hubs URLs of the hubs which should be notified about the update

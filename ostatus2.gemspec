@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ostatus/version'
+require 'ostatus2/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ostatus"
-  spec.version       = OStatus::VERSION
+  spec.name          = "ostatus2"
+  spec.version       = OStatus2::VERSION
   spec.authors       = ["Eugen Rochko"]
   spec.email         = ["eugen@zeonfederated.com"]
 
-  spec.summary       = "Toolset for interacting with the OStatus suite of protocols"
-  spec.description   = "Toolset for interacting with the OStatus suite of protocols"
-  spec.homepage      = "https://github.com/Gargron/ostatus"
+  spec.summary       = "Toolset for interacting with the OStatus2 suite of protocols"
+  spec.description   = "Toolset for interacting with the OStatus2 suite of protocols"
+  spec.homepage      = "https://github.com/Gargron/ostatus2"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files lib LICENSE README.md`.split($RS)

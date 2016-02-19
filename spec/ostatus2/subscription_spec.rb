@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe OStatus::Subscription do
+describe OStatus2::Subscription do
   let(:token)   { '123456'}
   let(:secret)  { '789123'}
   let(:hub)     { 'http://hub.example.com' }
   let(:topic)   { 'http://example.com/topic' }
   let(:webhook) { 'http://example.com/callback'}
 
-  subject { OStatus::Subscription.new(topic, token: token, secret: secret, webhook: webhook, hub: hub) }
+  subject { OStatus2::Subscription.new(topic, token: token, secret: secret, webhook: webhook, hub: hub) }
 
   describe '#subscribe' do
     before do

@@ -1,4 +1,4 @@
-# OStatus
+# OStatus2
 
 A Ruby toolset for interacting with the OStatus suite of protocols:
 
@@ -7,13 +7,13 @@ A Ruby toolset for interacting with the OStatus suite of protocols:
 
 ## Installation
 
-    gem install ostatus
+    gem install ostatus2
 
 ## Usage
 
 When your feed updates and you need to notify subscribers:
 
-    p = OStatus::Publication.new('http://url.to/feed', ['http://some.hub'])
+    p = OStatus2::Publication.new('http://url.to/feed', ['http://some.hub'])
     p.publish
 
 When you want to subscribe to a feed:
@@ -21,7 +21,7 @@ When you want to subscribe to a feed:
     token  = 'abc123'
     secret = 'def456'
 
-    s = OStatus::Subscription.new('http://url.to/feed', token: token, secret: secret, webhook: 'http://url.to/webhook', hub: 'http://some.hub')
+    s = OStatus2::Subscription.new('http://url.to/feed', token: token, secret: secret, webhook: 'http://url.to/webhook', hub: 'http://some.hub')
     s.subscribe
 
 Your webhook URL will receive a HTTP **GET** request that you will need to handle:
@@ -45,14 +45,14 @@ When you want to notify a remote resource about an interaction (like a comment):
 
     your_rsa_keypair = OpenSSL::PKey::RSA.new 2048
 
-    salmon   = OStatus::Salmon.new
+    salmon   = OStatus2::Salmon.new
     envelope = salmon.pack(comment, your_rsa_keypair)
 
     salmon.post('http://remote.salmon/endpoint', envelope)
 
 When you receive a Salmon notification about a remote interaction:
 
-    salmon  = OStatus::Salmon.new
+    salmon  = OStatus2::Salmon.new
     comment = salmon.unpack(envelope)
 
     # Parse comment and determine who the remote author is pretending to be,

@@ -1,4 +1,4 @@
-module OStatus
+module OStatus2
   class Subscription
     # @param [String] topic_url The URL of the topic of the subscription
     # @param [Hash] options

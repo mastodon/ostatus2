@@ -1,3 +1,3 @@
-module OStatus
+module OStatus2
   VERSION = "0.1.0"
 end

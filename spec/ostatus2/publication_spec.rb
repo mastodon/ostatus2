@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OStatus::Publication do
+describe OStatus2::Publication do
   let(:hubs) { ['http://hub1.example.com', 'http://hub2.example.com'] }
 
   before do
@@ -8,7 +8,7 @@ describe OStatus::Publication do
   end
 
   describe '#publish' do
-    subject { OStatus::Publication.new('http://example.com/feed', hubs) }
+    subject { OStatus2::Publication.new('http://example.com/feed', hubs) }
 
     before do
       subject.publish

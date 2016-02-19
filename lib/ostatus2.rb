@@ -4,12 +4,12 @@ require 'http'
 require 'addressable'
 require 'nokogiri'
 
-require 'ostatus/version'
-require 'ostatus/publication'
-require 'ostatus/subscription'
-require 'ostatus/salmon'
+require 'ostatus2/version'
+require 'ostatus2/publication'
+require 'ostatus2/subscription'
+require 'ostatus2/salmon'
 
-module OStatus
+module OStatus2
   class Error < StandardError
   end
 

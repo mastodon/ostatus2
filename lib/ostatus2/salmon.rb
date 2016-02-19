@@ -1,4 +1,4 @@
-module OStatus
+module OStatus2
   class Salmon
     XMLNS = 'http://salmon-protocol.org/ns/magic-env'
 
@@ -33,7 +33,7 @@ module OStatus
 
     # Unpack a magical envelope to get the content inside
     # @param [String] raw_body Magical envelope
-    # @raise [OStatus::BadSalmonError] Error raised if the envelope is malformed
+    # @raise [OStatus2::BadSalmonError] Error raised if the envelope is malformed
     # @return [String] Content inside the envelope
     def unpack(raw_body)
       body, _, _ = parse(raw_body)
@@ -47,7 +47,7 @@ module OStatus
     def verify(raw_body, key)
       _, plaintext, signature = parse(raw_body)
       key.public_key.verify(digest, signature, plaintext)
-    rescue OStatus::BadSalmonError
+    rescue OStatus2::BadSalmonError
       false
     end
 
@@ -64,7 +64,7 @@ module OStatus
     def parse(raw_body)
       xml = Nokogiri::XML(raw_body)
 
-      raise OStatus::BadSalmonError if xml.at_xpath('//me:data').nil? || xml.at_xpath('//me:data').attribute('type').nil? || xml.at_xpath('//me:sig').nil? || xml.at_xpath('//me:encoding').nil? || xml.at_xpath('//me:alg').nil?
+      raise OStatus2::BadSalmonError if xml.at_xpath('//me:data').nil? || xml.at_xpath('//me:data').attribute('type').nil? || xml.at_xpath('//me:sig').nil? || xml.at_xpath('//me:encoding').nil? || xml.at_xpath('//me:alg').nil?
 
       data      = xml.at_xpath('//me:data')
       type      = data.attribute('type').value

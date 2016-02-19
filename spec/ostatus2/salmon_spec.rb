@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe OStatus::Salmon do
+describe OStatus2::Salmon do
   let(:url)  { 'http://example.com/salmon' }
   let(:body) { 'Lorem ipsum dolor sit amet' }
   let(:key)  { OpenSSL::PKey::RSA.new 2048 }
 
-  subject { OStatus::Salmon.new }
+  subject { OStatus2::Salmon.new }
 
   describe '#pack' do
     it 'returns a magical envelope' do

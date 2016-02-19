@@ -4,7 +4,6 @@ A Ruby toolset for interacting with the OStatus suite of protocols:
 
 * Subscribing to and publishing feeds via PubSubHubbub
 * Interacting with feeds via Salmon
-* Parsing ActivityStreams
 
 ## Installation
 
@@ -41,3 +40,17 @@ Once the subscription is established, your webhook URL will be receiving HTTP **
     if s.verify(body, signature)
       # Do something with the data!
     end
+
+When you want to notify a remote resource about an interaction (like a comment):
+
+    your_rsa_keypair = OpenSSL::PKey::RSA.new 2048
+
+    salmon   = OStatus::Salmon.new
+    envelope = salmon.pack(comment, your_rsa_keypair)
+
+    salmon.post('http://remote.salmon/endpoint', envelope)
+
+When you receive a Salmon notification about a remote interaction:
+
+    salmon  = OStatus::Salmon.new
+    comment = salmon.unpack(envelope, your_rsa_keypair)

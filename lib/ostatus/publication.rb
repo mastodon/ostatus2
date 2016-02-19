@@ -8,6 +8,8 @@ module OStatus
     end
 
     # Notifies hubs about the update to the topic URL
+    # @raise [HTTP::Error] Error raised upon delivery failure
+    # @raise [OpenSSL::SSL::SSLError] Error raised upon SSL-related failure during delivery
     def publish
       @hubs.each { |hub| http_client.post(hub, form: { 'hub.mode' => 'publish', 'hub.url' => @url }) }
     end

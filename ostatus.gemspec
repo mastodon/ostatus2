@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('http', '~> 1.0')
   spec.add_dependency('addressable', '~> 2.4')
+  spec.add_dependency('nokogiri', '~> 1.6')
 
   spec.add_development_dependency "bundler", "~> 1.8"
 end

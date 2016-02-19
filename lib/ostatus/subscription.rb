@@ -15,12 +15,16 @@ module OStatus
     end
 
     # Subscribe to the topic via a specified hub
+    # @raise [HTTP::Error] Error raised upon delivery failure
+    # @raise [OpenSSL::SSL::SSLError] Error raised upon SSL-related failure during delivery
     # @return [Boolean]
     def subscribe
       update_subscription(:subscribe)
     end
 
     # Unsubscribe from the topic via a specified hub
+    # @raise [HTTP::Error] Error raised upon delivery failure
+    # @raise [OpenSSL::SSL::SSLError] Error raised upon SSL-related failure during delivery
     # @return [Boolean]
     def unsubscribe
       update_subscription(:unsubscribe)

@@ -1,32 +1,33 @@
 require 'spec_helper'
 
 describe OStatus::Subscription do
-  let(:token)  { '123456'}
-  let(:secret) { '789123'}
-  let(:hub)    { 'http://hub.example.com' }
-  let(:topic)  { 'http://example.com/topic' }
+  let(:token)   { '123456'}
+  let(:secret)  { '789123'}
+  let(:hub)     { 'http://hub.example.com' }
+  let(:topic)   { 'http://example.com/topic' }
+  let(:webhook) { 'http://example.com/callback'}
 
-  subject { OStatus::Subscription.new(topic, token: token, secret: secret, callback: 'http://example.com/callback') }
+  subject { OStatus::Subscription.new(topic, token: token, secret: secret, webhook: webhook, hub: hub) }
 
   describe '#subscribe' do
     before do
       stub_request(:post, hub).to_return(status: 200, body: '')
-      subject.subscribe(hub)
+      subject.subscribe
     end
 
     it 'sends a subscription request to the specified hub' do
-      expect(a_request(:post, hub)).to have_been_made
+      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'subscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.lease_seconds' => '', 'hub.verify' => 'async' })).to have_been_made
     end
   end
 
   describe '#unsubscribe' do
     before do
       stub_request(:post, hub).to_return(status: 200, body: '')
-      subject.unsubscribe(hub)
+      subject.unsubscribe
     end
 
     it 'sends a subscription termination request to the specified hub' do
-      expect(a_request(:post, hub)).to have_been_made
+      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'unsubscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.lease_seconds' => '', 'hub.verify' => 'async' })).to have_been_made
     end
   end
 

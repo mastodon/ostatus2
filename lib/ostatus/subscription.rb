@@ -2,28 +2,28 @@ module OStatus
   class Subscription
     # @param [String] topic_url The URL of the topic of the subscription
     # @param [Hash] options
-    # @option options [String] :callback Callback URL
+    # @option options [String] :webhook Webhook URL
+    # @option options [String] :hub Hub URL to work with
     # @option options [String] :secret Secret key of the subscription
     # @option options [String] :token Verification token of the subscription
     def initialize(topic_url, options = {})
-      @topic_url    = topic_url
-      @callback_url = options[:callback] || ''
-      @secret       = options[:secret]   || ''
-      @token        = options[:token]    || ''
+      @topic_url   = topic_url
+      @webhook_url = options[:webhook] || ''
+      @secret      = options[:secret]  || ''
+      @token       = options[:token]   || ''
+      @hub         = options[:hub]     || ''
     end
 
     # Subscribe to the topic via a specified hub
-    # @param [String] hub URL of the hub
     # @return [Boolean]
-    def subscribe(hub)
-      update_subscription(:subscribe, hub)
+    def subscribe
+      update_subscription(:subscribe)
     end
 
     # Unsubscribe from the topic via a specified hub
-    # @param [String] hub URL of the hub
     # @return [Boolean]
-    def unsubscribe(hub)
-      update_subscription(:unsubscribe, hub)
+    def unsubscribe
+      update_subscription(:unsubscribe)
     end
 
     # Check if the hub is responding to the right subscription request
@@ -45,9 +45,9 @@ module OStatus
 
     private
 
-    def update_subscription(mode, hub)
-      hub_url  = Addressable::URI.parse(hub)
-      response = http_client.post(hub_url, form: { 'hub.mode' => mode.to_s, 'hub.callback' => @callback_url, 'hub.verify' => 'async', 'hub.verify_token' => @token, 'hub.lease_seconds' => '', 'hub.secret' => @secret, 'hub.topic' => @topic_url })
+    def update_subscription(mode)
+      hub_url  = Addressable::URI.parse(@hub)
+      response = http_client.post(hub_url, form: { 'hub.mode' => mode.to_s, 'hub.callback' => @webhook_url, 'hub.verify' => 'async', 'hub.verify_token' => @token, 'hub.lease_seconds' => '', 'hub.secret' => @secret, 'hub.topic' => @topic_url })
       response.code == 200
     end
 

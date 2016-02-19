@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Eugen Rochko"]
   spec.email         = ["eugen@zeonfederated.com"]
 
-  spec.summary       = "A gem for dealing with the OStatus specification"
-  spec.description   = "A gem for dealing with the OStatus specification"
+  spec.summary       = "Toolset for interacting with the OStatus suite of protocols"
+  spec.description   = "Toolset for interacting with the OStatus suite of protocols"
   spec.homepage      = "https://github.com/Gargron/ostatus"
   spec.license       = "MIT"
 

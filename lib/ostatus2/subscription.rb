@@ -56,7 +56,7 @@ module OStatus2
     end
 
     def http_client
-      HTTP
+      HTTP.timeout(:per_operation, write: 60, connect: 20, read: 60)
     end
   end
 end

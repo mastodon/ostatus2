@@ -16,7 +16,7 @@ module OStatus2
     # Was the hub operation not successful?
     # @return [Boolean]
     def failed?
-      !success?
+      !successful?
     end
 
     # Returns error message if the operation was not successful

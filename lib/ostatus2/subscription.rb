@@ -51,8 +51,8 @@ module OStatus2
 
     def update_subscription(mode)
       hub_url  = Addressable::URI.parse(@hub)
-      response = http_client.post(hub_url, form: { 'hub.mode' => mode.to_s, 'hub.callback' => @webhook_url, 'hub.verify' => 'async', 'hub.verify_token' => @token, 'hub.lease_seconds' => '', 'hub.secret' => @secret, 'hub.topic' => @topic_url })
-      response.code == 200
+      response = http_client.post(hub_url, form: { 'hub.mode' => mode.to_s, 'hub.callback' => @webhook_url, 'hub.verify' => 'async', 'hub.verify_token' => @token, 'hub.secret' => @secret, 'hub.topic' => @topic_url })
+      SubscriptionResponse.new(response.code, response.body.to_s)
     end
 
     def http_client

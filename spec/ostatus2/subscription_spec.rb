@@ -11,23 +11,39 @@ describe OStatus2::Subscription do
 
   describe '#subscribe' do
     before do
-      stub_request(:post, hub).to_return(status: 200, body: '')
-      subject.subscribe
+      stub_request(:post, hub).to_return(status: 202, body: '')
+      @response = subject.subscribe
     end
 
     it 'sends a subscription request to the specified hub' do
-      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'subscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.lease_seconds' => '', 'hub.verify' => 'async' })).to have_been_made
+      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'subscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.verify' => 'async' })).to have_been_made
+    end
+
+    it 'returns a subscription response' do
+      expect(@response).to be_a OStatus2::SubscriptionResponse
+    end
+
+    it 'returns a successful response' do
+      expect(@response).to be_successful
     end
   end
 
   describe '#unsubscribe' do
     before do
-      stub_request(:post, hub).to_return(status: 200, body: '')
-      subject.unsubscribe
+      stub_request(:post, hub).to_return(status: 202, body: '')
+      @response = subject.unsubscribe
     end
 
     it 'sends a subscription termination request to the specified hub' do
-      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'unsubscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.lease_seconds' => '', 'hub.verify' => 'async' })).to have_been_made
+      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'unsubscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.verify' => 'async' })).to have_been_made
+    end
+
+    it 'returns a subscription response' do
+      expect(@response).to be_a OStatus2::SubscriptionResponse
+    end
+
+    it 'returns a successful response' do
+      expect(@response).to be_successful
     end
   end
 

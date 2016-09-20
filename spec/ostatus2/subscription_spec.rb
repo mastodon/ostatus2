@@ -1,13 +1,12 @@
 require 'spec_helper'
 
 describe OStatus2::Subscription do
-  let(:token)   { '123456'}
   let(:secret)  { '789123'}
   let(:hub)     { 'http://hub.example.com' }
   let(:topic)   { 'http://example.com/topic' }
   let(:webhook) { 'http://example.com/callback'}
 
-  subject { OStatus2::Subscription.new(topic, token: token, secret: secret, webhook: webhook, hub: hub) }
+  subject { OStatus2::Subscription.new(topic, secret: secret, webhook: webhook, hub: hub) }
 
   describe '#subscribe' do
     before do
@@ -16,7 +15,7 @@ describe OStatus2::Subscription do
     end
 
     it 'sends a subscription request to the specified hub' do
-      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'subscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.verify' => 'async' })).to have_been_made
+      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'subscribe', 'hub.callback' => webhook, 'hub.lease_seconds' => '', 'hub.secret' => secret, 'hub.verify' => 'async' })).to have_been_made
     end
 
     it 'returns a subscription response' do
@@ -35,7 +34,7 @@ describe OStatus2::Subscription do
     end
 
     it 'sends a subscription termination request to the specified hub' do
-      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'unsubscribe', 'hub.callback' => webhook, 'hub.verify_token' => token, 'hub.secret' => secret, 'hub.verify' => 'async' })).to have_been_made
+      expect(a_request(:post, hub).with(body: { 'hub.topic' => topic, 'hub.mode' => 'unsubscribe', 'hub.callback' => webhook, 'hub.lease_seconds' => '', 'hub.secret' => secret, 'hub.verify' => 'async' })).to have_been_made
     end
 
     it 'returns a subscription response' do
@@ -48,16 +47,12 @@ describe OStatus2::Subscription do
   end
 
   describe '#valid?' do
-    it 'returns true when the provided token and topic match' do
-      expect(subject.valid?(topic, token)).to be true
-    end
-
-    it 'returns false when the token is wrong' do
-      expect(subject.valid?(topic, 'bad token')).to be false
+    it 'returns true when the provided topic matches' do
+      expect(subject.valid?(topic)).to be true
     end
 
     it 'returns false when the topic is wrong' do
-      expect(subject.valid?('bad topic', token)).to be false
+      expect(subject.valid?('bad topic')).to be false
     end
   end
 

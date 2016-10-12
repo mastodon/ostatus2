@@ -1,5 +1,7 @@
 module OStatus2
   class Salmon
+    include OStatus2::MagicKey
+
     XMLNS = 'http://salmon-protocol.org/ns/magic-env'
 
     # Create a magical envelope XML document around the original body
@@ -68,9 +70,9 @@ module OStatus2
 
       data      = xml.at_xpath('//me:data')
       type      = data.attribute('type').value
-      body      = Base64::urlsafe_decode64(data.content) rescue ''
+      body      = decode_base64(data.content)
       sig       = xml.at_xpath('//me:sig')
-      signature = Base64::urlsafe_decode64(sig.content) rescue ''
+      signature = decode_base64(sig.content)
       encoding  = xml.at_xpath('//me:encoding').content
       alg       = xml.at_xpath('//me:alg').content
       plaintext = plaintext_signature(body, type, encoding, alg)

@@ -66,15 +66,15 @@ module OStatus2
     def parse(raw_body)
       xml = Nokogiri::XML(raw_body)
 
-      raise OStatus2::BadSalmonError if xml.at_xpath('//me:data').nil? || xml.at_xpath('//me:data').attribute('type').nil? || xml.at_xpath('//me:sig').nil? || xml.at_xpath('//me:encoding').nil? || xml.at_xpath('//me:alg').nil?
+      raise OStatus2::BadSalmonError if xml.at_xpath('//me:data', me: XMLNS).nil? || xml.at_xpath('//me:data', me: XMLNS).attribute('type').nil? || xml.at_xpath('//me:sig', me: XMLNS).nil? || xml.at_xpath('//me:encoding', me: XMLNS).nil? || xml.at_xpath('//me:alg', me: XMLNS).nil?
 
-      data      = xml.at_xpath('//me:data')
+      data      = xml.at_xpath('//me:data', me: XMLNS)
       type      = data.attribute('type').value
       body      = decode_base64(data.content)
-      sig       = xml.at_xpath('//me:sig')
+      sig       = xml.at_xpath('//me:sig', me: XMLNS)
       signature = decode_base64(sig.content)
-      encoding  = xml.at_xpath('//me:encoding').content
-      alg       = xml.at_xpath('//me:alg').content
+      encoding  = xml.at_xpath('//me:encoding', me: XMLNS).content
+      alg       = xml.at_xpath('//me:alg', me: XMLNS).content
       plaintext = plaintext_signature(body, type, encoding, alg)
 
       [body, plaintext, signature]

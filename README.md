@@ -2,12 +2,12 @@ OStatus2
 ==========
 
 [![Gem Version](http://img.shields.io/gem/v/ostatus2.svg)][gem]
-[![Build Status](http://img.shields.io/travis/Gargron/ostatus2.svg)][travis]
-[![Dependency Status](http://img.shields.io/gemnasium/Gargron/ostatus2.svg)][gemnasium]
+[![Build Status](http://img.shields.io/travis/tootsuite/ostatus2.svg)][travis]
+[![Dependency Status](http://img.shields.io/gemnasium/tootsuite/ostatus2.svg)][gemnasium]
 
 [gem]: https://rubygems.org/gems/ostatus2
-[travis]: https://travis-ci.org/Gargron/ostatus2
-[gemnasium]: https://gemnasium.com/Gargron/ostatus2
+[travis]: https://travis-ci.org/tootsuite/ostatus2
+[gemnasium]: https://gemnasium.com/tootsuite/ostatus2
 
 A Ruby toolset for interacting with the OStatus suite of protocols:
 

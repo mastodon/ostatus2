@@ -4,10 +4,8 @@ module OStatus2
       _, modulus, exponent = magic_key.split('.')
       modulus, exponent = [modulus, exponent].map { |n| decode_base64(n).bytes.inject(0) { |a, e| (a << 8) | e } }
 
-      key   = OpenSSL::PKey::RSA.new
-      key.n = modulus
-      key.e = exponent
-
+      key = OpenSSL::PKey::RSA.new
+      key.set_key(modulus, exponent, nil)
       key.to_pem
     end
 

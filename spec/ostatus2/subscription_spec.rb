@@ -19,11 +19,11 @@ describe OStatus2::Subscription do
     end
 
     it 'returns a subscription response' do
-      expect(@response).to be_a OStatus2::SubscriptionResponse
+      expect(@response).to be_a HTTP::Response
     end
 
     it 'returns a successful response' do
-      expect(@response).to be_successful
+      expect(@response.code).to eq 202
     end
   end
 
@@ -38,11 +38,11 @@ describe OStatus2::Subscription do
     end
 
     it 'returns a subscription response' do
-      expect(@response).to be_a OStatus2::SubscriptionResponse
+      expect(@response).to be_a HTTP::Response
     end
 
     it 'returns a successful response' do
-      expect(@response).to be_successful
+      expect(@response.code).to eq 202
     end
   end
 

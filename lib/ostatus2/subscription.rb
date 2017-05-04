@@ -18,7 +18,7 @@ module OStatus2
     # Subscribe to the topic via a specified hub
     # @raise [HTTP::Error] Error raised upon delivery failure
     # @raise [OpenSSL::SSL::SSLError] Error raised upon SSL-related failure during delivery
-    # @return [Boolean]
+    # @return [HTTP::Response]
     def subscribe
       update_subscription(:subscribe)
     end
@@ -26,7 +26,7 @@ module OStatus2
     # Unsubscribe from the topic via a specified hub
     # @raise [HTTP::Error] Error raised upon delivery failure
     # @raise [OpenSSL::SSL::SSLError] Error raised upon SSL-related failure during delivery
-    # @return [Boolean]
+    # @return [HTTP::Response]
     def unsubscribe
       update_subscription(:unsubscribe)
     end
@@ -51,8 +51,7 @@ module OStatus2
 
     def update_subscription(mode)
       hub_url  = Addressable::URI.parse(@hub)
-      response = http_client.post(hub_url, form: { 'hub.mode' => mode.to_s, 'hub.callback' => @webhook_url, 'hub.verify' => 'async', 'hub.lease_seconds' => '', 'hub.secret' => @secret, 'hub.topic' => @topic_url })
-      SubscriptionResponse.new(response.code, response.body.to_s)
+      http_client.post(hub_url, form: { 'hub.mode' => mode.to_s, 'hub.callback' => @webhook_url, 'hub.verify' => 'async', 'hub.lease_seconds' => '', 'hub.secret' => @secret, 'hub.topic' => @topic_url })
     end
 
     def http_client

@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Toolset for interacting with the OStatus2 suite of protocols"
   spec.description   = "Toolset for interacting with the OStatus2 suite of protocols"
-  spec.homepage      = "https://github.com/Gargron/ostatus2"
+  spec.homepage      = "https://github.com/tootsuite/ostatus2"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files lib LICENSE README.md`.split($RS)

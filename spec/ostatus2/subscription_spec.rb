@@ -65,6 +65,13 @@ describe OStatus2::Subscription do
       expect(subject.verify(content, signature)).to be true
     end
 
+    it 'returns true when the signature is coming in as uppercase and matches the contents' do
+      hash      = OpenSSL::HMAC.hexdigest('sha1', secret, content).upcase
+      signature = "sha1=#{hash}"
+
+      expect(subject.verify(content, signature)).to be true
+    end
+
     it 'returns false when the contents were signed with a different secret' do
       hash      = OpenSSL::HMAC.hexdigest('sha1', 'other secret', content)
       signature = "sha1=#{hash}"

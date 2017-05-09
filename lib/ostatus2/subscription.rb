@@ -44,7 +44,7 @@ module OStatus2
     # @return [Boolean]
     def verify(content, signature)
       hmac = OpenSSL::HMAC.hexdigest('sha1', @secret, content)
-      signature == "sha1=#{hmac}"
+      signature.downcase == "sha1=#{hmac}"
     end
 
     private

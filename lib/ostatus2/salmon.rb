@@ -70,9 +70,9 @@ module OStatus2
 
       data      = xml.at_xpath('//me:data', me: XMLNS)
       type      = data.attribute('type').value
-      body      = decode_base64(data.content)
+      body      = decode_base64(data.content.gsub(/\s+/, ''))
       sig       = xml.at_xpath('//me:sig', me: XMLNS)
-      signature = decode_base64(sig.content)
+      signature = decode_base64(sig.content.gsub(/\s+/, ''))
       encoding  = xml.at_xpath('//me:encoding', me: XMLNS).content
       alg       = xml.at_xpath('//me:alg', me: XMLNS).content
       plaintext = plaintext_signature(body, type, encoding, alg)

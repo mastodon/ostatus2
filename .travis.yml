@@ -6,7 +6,10 @@ rvm:
   - 2.2
   - 2.3.1
   - 2.4.1
+  - 2.5
   - ruby-head
+
+before_install: travis_retry gem update --system
 
 bundler_args: --without development --retry=3 --jobs=3
 

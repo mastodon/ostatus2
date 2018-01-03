@@ -17,7 +17,6 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files lib LICENSE README.md`.split($RS)
   spec.require_paths = ["lib"]
 
-  spec.add_dependency('openssl', '~> 2.0')
   spec.add_dependency('http', '~> 2.0')
   spec.add_dependency('addressable', '~> 2.4')
   spec.add_dependency('nokogiri', '~> 1.6')

@@ -54,19 +54,18 @@ When you want to notify a remote resource about an interaction (like a comment):
 
     your_rsa_keypair = OpenSSL::PKey::RSA.new 2048
 
-    salmon   = OStatus2::Salmon.new
-    envelope = salmon.pack(comment, your_rsa_keypair)
+    envelope = OStatus2::Salmon::MagicEnvelope.new(comment, your_rsa_keypair)
 
-    salmon.post('http://remote.salmon/endpoint', envelope)
+    OStatus2::Salmon::MagicEnvelope.post_xml('http://remote.salmon/endpoint', envelope.to_xml)
 
 When you receive a Salmon notification about a remote interaction:
 
-    salmon  = OStatus2::Salmon.new
-    comment = salmon.unpack(envelope)
+    envelope = OStatus2::Salmon::MagicEnvelope(xml)
 
-    # Parse comment and determine who the remote author is pretending to be,
-    # fetch their public key via Webfinger or something like that, and finally
+    # Parse envelope.body and determine who the remote author is pretending to
+    # be, fetch their public key via Webfinger or something like that, and
+    # finally
 
-    if salmon.verify(envelope, remote_public_key)
+    if envelope.verify(remote_public_key)
       # You can be sure the salmon is genuine
     end
